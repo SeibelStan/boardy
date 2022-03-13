@@ -1,18 +1,24 @@
-[
-    {
-        "type": "figure",
-        "class": "master white",
-        "flip": 0,
-        "x": 10,
-        "y": 10,
-        "r": 0
+{
+    "board": {
+        "grid-x": 30,
+        "grid-y": 30
     },
-    {
-        "type": "figure",
-        "class": "pawn black",
-        "flip": 0,
-        "x": 10,
-        "y": 10,
-        "r": 0
-    }
-]
+    "objects": [
+        {
+            "type": "figure",
+            "class": "master white",
+            "flip": 0,
+            "x": 10,
+            "y": 10,
+            "r": 0
+        },
+        {
+            "type": "figure",
+            "class": "pawn black",
+            "flip": 0,
+            "x": 10,
+            "y": 10,
+            "r": 0
+        }
+    ]
+}
