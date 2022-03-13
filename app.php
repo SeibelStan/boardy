@@ -24,6 +24,10 @@ class GameServer implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
         $numRecv = count($this->clients) - 1;
         echo sprintf(
             'Connection %d sending message "%s" to %d other connection%s' . "\n",
@@ -33,10 +37,33 @@ class GameServer implements MessageComponentInterface
             $numRecv == 1 ? '' : 's'
         );
 
+        $jmsg = json_decode($msg);
+        $method = $jmsg->method;
+        $game = $jmsg->game;
+        $data = $jmsg->data;
+
+        if ($method == 'getState') {
+            $this->getState($from, $game, $data);
+        }
+    }
+
+    public function getState($from, $game, $data)
+    {
+        $objects = apcu_fetch($game . '_' . $data->key);
+
+        if (!$objects) {
+            $objects = file_get_contents("$game/objects.json");
+        }
+
+        $from->send($objects);
+    }
+
+    public function makeTurn($from, $game, $data)
+    {
         foreach ($this->clients as $client) {
             if ($from !== $client) {
                 // The sender is not the receiver, send to each client connected
-                $client->send($msg);
+                $client->send($data);
             }
         }
     }
